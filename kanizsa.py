@@ -120,13 +120,12 @@ def get_random_point(x_min, x_max, y_min, y_max, rectangles):
     print("Can't find empty space")
     sys.exit(1)
 
-if __name__ == '__main__':
+def make_figure(file_name='kanizsa.png'):
+    plt.axes()
+    ax = plt.gca()
     canvas_width, canvas_height = 10, 7
     triang_len = 1.5
     wedge_r = 0.2
-    plt.close('all')
-    plt.axes()
-    ax = plt.gca()
 
     ws, rectangles = [], []
 
@@ -158,9 +157,13 @@ if __name__ == '__main__':
     ax.set_xticks([])
     ax.set_yticks([])
     plt.axis('scaled')
-    plt.xlim(0, canvas_width)
-    plt.ylim(0, canvas_height)
+    ax.set_xlim(0, canvas_width)
+    ax.set_ylim(0, canvas_height)
     plt.tight_layout(pad=1)
-    plt.savefig('kanizsa.pdf')
-    plt.savefig('kanizsa.png')
+    plt.savefig(file_name)
+
+
+if __name__ == '__main__':
+    plt.close('all')
+    make_figure()
     plt.show()
