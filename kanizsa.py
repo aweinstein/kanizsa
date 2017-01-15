@@ -165,11 +165,10 @@ def make_figure(fake_kanizsa=False, file_name='kanizsa.png'):
     plt.axis('scaled')
     ax.set_xlim(0, canvas_width)
     ax.set_ylim(0, canvas_height)
-    plt.tight_layout(pad=1)
-    plt.savefig(file_name)
+    plt.savefig(file_name, bbox_inches = 'tight', pad_inches=0)
 
 
 if __name__ == '__main__':
     plt.close('all')
-    make_figure(True)
+    make_figure(False)
     plt.show()
