@@ -26,7 +26,7 @@ def wedge(xy, theta, r=0.1):
     return (wedge, r)
 
 
-def triangle(xy, length, r=0.1):
+def triangle(xy, length, r=0.1, fake_kanizsa=False):
     """Creates kanizsa figure.
 
     Parameters
@@ -37,6 +37,8 @@ def triangle(xy, length, r=0.1):
         Lenght of the triangle.
     r : float, optional
         Radius for the wedges.
+    fake_kanizsa : bool
+        If True, the wedges do not form a triangle.
 
     Returns
     -------
@@ -45,14 +47,17 @@ def triangle(xy, length, r=0.1):
     the kaniza figure.
 
     """
+    angs = np.array([0., 120, -120])
+    if fake_kanizsa:
+        angs += np.random.uniform(0, 360, 3)
+        print(angs)
     x, y = xy
-    w1, _ = wedge(xy, 0, r)
-    w2, _ = wedge((x+length, y), 120, r)
+    w1, _ = wedge(xy, angs[0], r)
+    w2, _ = wedge((x+length, y), angs[1], r)
     factor = np.sin(np.degrees(60))
     x += length / 2
-    y += length * factor # move the sin out of the function to
-                         # shave a few microseconds
-    w3, _ = wedge((x,y), -120, r)
+    y += length * factor
+    w3, _ = wedge((x,y), angs[2], r)
     rect  = rectangle(xy[0]-2*r, xy[1]-2*r, length + 4*r, length*factor + 4*r)
     return ((w1, w2, w3), rect)
 
@@ -120,7 +125,7 @@ def get_random_point(x_min, x_max, y_min, y_max, rectangles):
     print("Can't find empty space")
     sys.exit(1)
 
-def make_figure(file_name='kanizsa.png'):
+def make_figure(fake_kanizsa=False, file_name='kanizsa.png'):
     plt.axes()
     ax = plt.gca()
     canvas_width, canvas_height = 10, 7
@@ -135,7 +140,8 @@ def make_figure(file_name='kanizsa.png'):
                           canvas_width / 2 - triang_len/2 + delta)
     y = np.random.uniform(canvas_height / 2 - triang_len/2 - delta,
                           canvas_height / 2 - triang_len/2 + delta)
-    ws_triang, r = triangle((x,y), triang_len, wedge_r)
+    ws_triang, r = triangle((x,y), triang_len, wedge_r,
+                            fake_kanizsa=fake_kanizsa)
     ws.extend(ws_triang)
     rectangles.append(r)
 
@@ -165,5 +171,5 @@ def make_figure(file_name='kanizsa.png'):
 
 if __name__ == '__main__':
     plt.close('all')
-    make_figure()
+    make_figure(True)
     plt.show()
