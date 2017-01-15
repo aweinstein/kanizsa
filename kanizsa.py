@@ -50,7 +50,6 @@ def triangle(xy, length, r=0.1, fake_kanizsa=False):
     angs = np.array([0., 120, -120])
     if fake_kanizsa:
         angs += np.random.uniform(0, 360, 3)
-        print(angs)
     x, y = xy
     w1, _ = wedge(xy, angs[0], r)
     w2, _ = wedge((x+length, y), angs[1], r)
@@ -126,6 +125,7 @@ def get_random_point(x_min, x_max, y_min, y_max, rectangles):
     sys.exit(1)
 
 def make_figure(fake_kanizsa=False, file_name='kanizsa.png'):
+    plt.figure()
     plt.axes()
     ax = plt.gca()
     canvas_width, canvas_height = 10, 7
@@ -169,6 +169,11 @@ def make_figure(fake_kanizsa=False, file_name='kanizsa.png'):
 
 
 if __name__ == '__main__':
-    plt.close('all')
-    make_figure(False)
-    plt.show()
+    n_images = 3
+    for n in range(n_images):
+        fn = 'kanizsa_{:02d}.png'.format(n)
+        print('Making figure', fn)
+        make_figure(False, fn)
+        fn = 'kanizsa_false_{:02d}.png'.format(n)
+        print('Making figure', fn)
+        make_figure(True, fn)
