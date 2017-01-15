@@ -4,6 +4,22 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
 def wedge(xy, theta, r=0.1):
+    """Creates a PacMan like wedge.
+
+    Parameters
+    ----------
+    xy : tuple
+        (x,y) position of the center of the wedge.
+    theta: float
+        Orientation, in degrees, of the wedge.
+    r : float, optional
+        Radius of the wedge. Default to 0.1.
+
+    Returns
+    -------
+    (Wedge, Rectangle)
+        Matplotlib wedge object, and the bounding rectangle of the wedge.
+    """
     wedge = mpatches.Wedge(xy, r, theta + 60, theta+360, ec='none', fc='white')
     pad = 3*r
     r = rectangle(xy[0] - 2*r, xy[1] - 2*r, 2*r + pad, 2*r + pad)
@@ -11,6 +27,24 @@ def wedge(xy, theta, r=0.1):
 
 
 def triangle(xy, length, r=0.1):
+    """Creates kanizsa figure.
+
+    Parameters
+    ----------
+    xy : tuple
+        (x,y) position of the lower left vertice of the triangle.
+    length : tuple
+        Lenght of the triangle.
+    r : float, optional
+        Radius for the wedges.
+
+    Returns
+    -------
+    ((w1, w2, w3), rect)
+        A triplet with the wedges of the kanizsa figure, and the bounding box of
+    the kaniza figure.
+
+    """
     x, y = xy
     w1, _ = wedge(xy, 0, r)
     w2, _ = wedge((x+length, y), 120, r)
@@ -23,14 +57,36 @@ def triangle(xy, length, r=0.1):
     return ((w1, w2, w3), rect)
 
 
-class rectangle():
+class rectangle(object):
+    """Basic rectangle object."""
     def __init__(self, x, y, w, h):
+        """Creates a rectangle.
+
+        Parameters
+        ----------
+        x, y : float
+            Left lower corner of the rectangle.
+        w, h : float
+            Width and height of the rectangle
+        """
         self.x = x
         self.y = y
         self.w = w
         self.h = h
 
     def point_not_in_rectangle(self, x, y):
+        """Check if a point is inside of the rectangle.
+
+        Parameters
+        ----------
+        x, y: float
+            (x,y) coordinates of the point.
+
+        Returns
+        -------
+        bool
+            True if the point is outside the rectangle
+        """
         if ((self.x <= x <= (self.x + self.w)) and
             (self.y <= y <= (self.y + self.h))):
             not_in_rectangle = False
@@ -39,6 +95,19 @@ class rectangle():
         return not_in_rectangle
 
 def get_random_point(x_min, x_max, y_min, y_max, rectangles):
+    """Get a random point outside the list of rectangles.
+
+    If after 100 iterations the function does not find a point outside the
+    rectangles, the program exits.
+
+    Parameters
+    ----------
+    x_min, x_max, y_min, y_max: float
+        Coordinates of the rectangular sample space area.
+    rectangles: list
+        List of rectangles with the rejection areas.
+
+    """
     n_max = 100
     n = 0
     while n < n_max:
@@ -84,12 +153,6 @@ if __name__ == '__main__':
 
     for w in ws:
         ax.add_patch(w)
-
-    # FOR DEBUG
-    # for r in rectangles:
-    #     rect = mpatches.Rectangle((r.x, r.y), r.w, r.h, ec='red', fc='none')
-    #     ax.add_patch(rect)
-
 
     ax.set_axis_bgcolor('black')
     ax.set_xticks([])
