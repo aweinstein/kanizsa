@@ -181,6 +181,7 @@ def make_figure(fig_type='illusion', file_name='kanizsa.png'):
     ax.set_xlim(0, canvas_width)
     ax.set_ylim(0, canvas_height)
     plt.savefig(file_name, bbox_inches = 'tight', pad_inches=0)
+    plt.close()
 
 
 if __name__ == '__main__':
