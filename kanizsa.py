@@ -174,7 +174,7 @@ def make_figure(fig_type='illusion', file_name='kanizsa.png'):
     for w in ws:
         ax.add_patch(w)
 
-    ax.set_axis_bgcolor('black')
+    ax.set_facecolor('black')
     ax.set_xticks([])
     ax.set_yticks([])
     plt.axis('scaled')
