@@ -124,7 +124,18 @@ def get_random_point(x_min, x_max, y_min, y_max, rectangles):
     print("Can't find empty space")
     sys.exit(1)
 
-def make_figure(fake_kanizsa=False, file_name='kanizsa.png'):
+def make_figure(fig_type='illusion', file_name='kanizsa.png'):
+    """Make a kanizsa figure and save it as a PNG file.
+
+    Parameters
+    ----------
+    fig_type: string
+        Type of figure. Valid options are
+        ['illusion', 'fake', 'triangle'].
+        Default is 'illusion'.
+    file_name: string
+        Name of the PNG file
+    """
     plt.figure()
     plt.axes()
     ax = plt.gca()
@@ -141,7 +152,11 @@ def make_figure(fake_kanizsa=False, file_name='kanizsa.png'):
     y = np.random.uniform(canvas_height / 2 - triang_len/2 - delta,
                           canvas_height / 2 - triang_len/2 + delta)
     ws_triang, r = triangle((x,y), triang_len, wedge_r,
-                            fake_kanizsa=fake_kanizsa)
+                            fake_kanizsa=(fig_type == 'fake'))
+    if fig_type == 'triangle':
+        xs = [x,x+triang_len, x + triang_len/2, x]
+        ys = [y, y, y + triang_len * np.sin(np.degrees(60)), y]
+        ax.plot(xs, ys, color='white')
     ws.extend(ws_triang)
     rectangles.append(r)
 
@@ -173,7 +188,10 @@ if __name__ == '__main__':
     for n in range(n_images):
         fn = 'kanizsa_{:02d}.png'.format(n)
         print('Making figure', fn)
-        make_figure(False, fn)
+        make_figure('illusion', fn)
         fn = 'kanizsa_false_{:02d}.png'.format(n)
         print('Making figure', fn)
-        make_figure(True, fn)
+        make_figure('fake', fn)
+        fn = 'kanizsa_triangle_{:02d}.png'.format(n)
+        print('Making figure', fn)
+        make_figure('triangle', fn)
